@@ -51,13 +51,13 @@ faiss_index/
 mlruns/
 .mlflow/
 
-# Data
+# Data - ignore only PDFs and processed data, NOT the directory structure
 data/sample_pdfs/*.pdf
 data/processed/
 
-# Logs
-logs/
+# Logs - ignore log files but keep logs directory
 *.log
+logs/*.log
 
 # Jupyter
 .ipynb_checkpoints/
@@ -74,3 +74,7 @@ htmlcov/
 # Streamlit
 .streamlit/cache/
 .streamlit/config.toml
+
+# Package directories during development
+*.dist-info/
+*.pyc
