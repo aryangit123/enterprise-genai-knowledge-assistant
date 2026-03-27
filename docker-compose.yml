@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  streamlit:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: genai-assistant-streamlit
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data:/app/data
+      - ./faiss_index:/app/faiss_index
+      - ./logs:/app/logs
+    environment:
+      - FAISS_INDEX_PATH=/app/faiss_index
+      - LOG_LEVEL=INFO
+    command: streamlit
+    networks:
+      - genai-network
+
+  fastapi:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: genai-assistant-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./faiss_index:/app/faiss_index
+      - ./logs:/app/logs
+    environment:
+      - FAISS_INDEX_PATH=/app/faiss_index
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - LOG_LEVEL=INFO
+    command: api
+    networks:
+      - genai-network
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    container_name: genai-mlflow
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlruns:/mlflow/mlruns
+    command: mlflow server --host 0.0.0.0 --port 5000
+    networks:
+      - genai-network
+
+networks:
+  genai-network:
+    driver:bridge
