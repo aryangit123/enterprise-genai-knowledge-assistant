@@ -13,64 +13,56 @@ logger = get_logger(__name__)
 # Page configuration
 st.set_page_config(
     page_title="Enterprise GenAI Knowledge Assistant",
-    page_icon="🤖",
+    page_icon="📚",
     layout="wide"
 )
 
 # Header
-st.title("🤖 Enterprise GenAI Knowledge Assistant")
+st.title("📚 Enterprise GenAI Knowledge Assistant")
 st.write(
-    "Ask questions from your enterprise documents (PDFs). "
-    "The system will retrieve relevant context and generate answers."
+    "Ask questions about your documents. The system will find relevant information and provide answers."
 )
 
 # Sidebar information
 with st.sidebar:
-    st.header("ℹ️ Information")
+    st.header("ℹ️ How It Works")
     st.markdown("""
-    ### How it works:
-    1. **Ingestion**: PDFs are processed and converted to embeddings
-    2. **Retrieval**: Relevant documents are fetched for your query
-    3. **Generation**: An answer is generated based on the context
+    ### The Process:
+    1. **Input**: You ask a question
+    2. **Search**: The system finds relevant parts of your documents
+    3. **Answer**: An AI generates an answer based on the found information
     
-    ### Requirements:
-    - FAISS index must be built before querying
+    ### Required:
+    - FAISS index must be built first
     - PDFs should be in `data/sample_pdfs/`
     """)
 
 # Input box
-query = st.text_input("Enter your question here:")
+query = st.text_input("Ask a question about your documents:")
 
 # Submit button
-if st.button("Submit", type="primary"):
+if st.button("Search", type="primary"):
     if query.strip() == "":
-        st.warning("⚠️ Please enter a valid question!")
+        st.warning("⚠️ Please enter a question!")
     else:
-        with st.spinner("🔍 Retrieving information and generating answer..."):
+        with st.spinner("🔍 Searching documents..."):
             try:
-                logger.info(f"Processing query from UI: {query[:100]}")
+                logger.info(f"User query: {query}")
                 answer = rag_pipeline(query)
-                st.subheader("💡 Answer:")
+                
+                st.subheader("Answer:")
                 st.success(answer)
-                logger.info("Query processed successfully")
-            except FileNotFoundError as e:
-                st.error(f"❌ FAISS index not found!")
+                logger.info("Query success")
+                
+            except FileNotFoundError:
+                st.error("❌ FAISS index not found!")
                 st.info(
-                    "Please create the FAISS index first by running:\n"
-                    "`python scripts/create_index.py`\n\n"
-                    "Make sure your PDF is in `data/sample_pdfs/` directory."
+                    "Create the index first:\n```\npython scripts/create_index.py\n```"
                 )
-                logger.error(f"FAISS index error: {str(e)}")
             except Exception as e:
-                st.error(f"❌ An error occurred: {str(e)}")
-                st.info(
-                    "Common solutions:\n"
-                    "1. Verify FAISS index is built: `python scripts/create_index.py`\n"
-                    "2. Check PDF file exists in `data/sample_pdfs/`\n"
-                    "3. Verify all models are properly installed"
-                )
-                logger.error(f"Error in UI: {str(e)}")
+                st.error(f"❌ Error: {str(e)}")
+                st.info("Make sure FAISS index is built: `python scripts/create_index.py`")
+                logger.error(f"Error: {str(e)}")
 
-# Optional: Footer
 st.markdown("---")
-st.caption("Enterprise GenAI Knowledge Assistant | MTech Project Demo")
+st.caption("Enterprise GenAI Knowledge Assistant")

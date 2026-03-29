@@ -5,7 +5,7 @@ from logger import get_logger
 logger = get_logger(__name__)
 
 def create_vector_store(chunks, embeddings):
-    """Create and save FAISS vector store."""
+    """Create and save FAISS vector store from document chunks."""
     try:
         from config import FAISS_INDEX_PATH
         
@@ -24,7 +24,7 @@ def create_vector_store(chunks, embeddings):
         raise
 
 def load_vector_store(embeddings):
-    """Load FAISS vector store."""
+    """Load FAISS vector store for similarity search."""
     try:
         from config import FAISS_INDEX_PATH
         
@@ -34,7 +34,7 @@ def load_vector_store(embeddings):
                 f"Please run 'python scripts/create_index.py' first."
             )
         
-        logger.info(f"Loading FAISS vector store from {FAISS_INDEX_PATH}...")
+        logger.info(f"Loading FAISS vector store...")
         db = FAISS.load_local(
             FAISS_INDEX_PATH,
             embeddings,
@@ -48,4 +48,5 @@ def load_vector_store(embeddings):
         raise
     except Exception as e:
         logger.error(f"Error loading vector store: {str(e)}")
+        raise
         raise

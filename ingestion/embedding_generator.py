@@ -5,13 +5,11 @@ from logger import get_logger
 logger = get_logger(__name__)
 
 def load_embedding_model():
-    """Load embedding model."""
+    """Load embedding model to convert text to vectors."""
     try:
         logger.info(f"Loading embedding model: {EMBEDDING_MODEL}...")
         
-        embeddings = HuggingFaceEmbeddings(
-            model_name=EMBEDDING_MODEL
-        )
+        embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL)
         
         logger.info("Embedding model loaded successfully")
         return embeddings

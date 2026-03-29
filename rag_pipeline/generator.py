@@ -8,7 +8,7 @@ logger = get_logger(__name__)
 _generator_cache = None
 
 def get_generator():
-    """Get or create generator instance (cached)."""
+    """Get or create generator instance (cached to avoid reloading)."""
     global _generator_cache
     
     if _generator_cache is None:

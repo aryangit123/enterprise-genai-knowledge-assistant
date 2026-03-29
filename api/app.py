@@ -36,7 +36,7 @@ def query_documents(request: QueryRequest):
                 detail="Question cannot be empty"
             )
         
-        logger.info(f"Processing query: {request.question[:100]}...")
+        logger.info(f"Processing query: {request.question[:50]}...")
         answer = rag_pipeline(request.question)
         
         return {
@@ -67,7 +67,7 @@ def query_documents_get(question: str):
                 detail="Question cannot be empty"
             )
         
-        logger.info(f"Processing GET query: {question[:100]}...")
+        logger.info(f"Processing GET query: {question[:50]}...")
         answer = rag_pipeline(question)
         
         return {

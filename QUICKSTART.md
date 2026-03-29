@@ -1,6 +1,126 @@
 # Quick Start Guide
 
-## 🚀 Fast Setup (5 minutes)
+## 🚀 Setup (5 minutes)
+
+### 1. Create Virtual Environment
+
+**Windows:**
+```bash
+python -m venv genai_env
+genai_env\Scripts\activate
+```
+
+**Mac/Linux:**
+```bash
+python -m venv genai_env
+source genai_env/bin/activate
+```
+
+### 2. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Copy Configuration
+
+```bash
+# Windows
+copy .env.example .env
+
+# Mac/Linux
+cp .env.example .env
+```
+
+---
+
+## 📄 Create FAISS Index
+
+Before running, you need to index your PDFs:
+
+```bash
+python scripts/create_index.py
+```
+
+This reads PDFs from `data/sample_pdfs/` and creates a searchable index.
+
+---
+
+## 🎯 Run the Application
+
+### Option 1: Web Interface (Recommended)
+
+```bash
+streamlit run ui/streamlit_app.py
+```
+
+Then open http://localhost:8501 in your browser.
+
+### Option 2: REST API
+
+```bash
+python api/app.py
+```
+
+Then test it:
+```bash
+curl -X POST http://localhost:8000/query \
+  -H "Content-Type: application/json" \
+  -d '{"question": "What is in this document?"}'
+```
+
+### Option 3: Docker
+
+```bash
+docker-compose up
+```
+
+---
+
+## 🔧 Configuration
+
+Edit `.env` file:
+
+```env
+# Embedding model
+EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
+
+# LLM model
+LLM_MODEL=TinyLlama/TinyLlama-1.1B-Chat-v1.0
+LLM_MAX_TOKENS=300
+
+# How many documents to retrieve
+RETRIEVAL_K=3
+
+# API port
+API_PORT=8000
+```
+
+---
+
+## 🐛 Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| FAISS index not found | Run `python scripts/create_index.py` |
+| PDF not found | Put PDFs in `data/sample_pdfs/` |
+| Module not found | Run `pip install -r requirements.txt` |
+| Out of memory | Reduce `LLM_MAX_TOKENS` to 150 |
+
+---
+
+## ✅ Next Steps
+
+1. ✓ Install dependencies
+2. ✓ Create FAISS index
+3. ✓ Run web UI or API
+4. ✓ Ask questions
+5. ✓ Customize settings as needed
+
+---
+
+**For more information, see [README_SIMPLE.md](README_SIMPLE.md)**
+
 
 ### Option 1: Direct Installation
 
